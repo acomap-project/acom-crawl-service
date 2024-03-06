@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build-crawl-function:
+    uses: ./.github/workflows/build-lambda-function.yaml
+    with:
+      name: crawl-function
+      lambda-function-name: CRAWL_crawl-function
+      region: ap-southeast-1
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  build-merge-accoms-function:
+    uses: ./.github/workflows/build-lambda-function.yaml
+    with:
+      name: merge-accoms-function
+      lambda-function-name: CRAWL_merge-accoms-function
+      region: ap-southeast-1
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  build-map-function:
+    uses: ./.github/workflows/build-lambda-function.yaml
+    with:
+      name: map-function
+      lambda-function-name: CRAWL_map-function
+      region: ap-southeast-1
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      account-id: ${{ secrets.AWS_ACCOUNT_ID }}

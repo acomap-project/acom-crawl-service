@@ -1,0 +1,120 @@
+name: build-lambda-function
+
+on:
+  workflow_call:
+    inputs:
+      region:
+        required: true
+        type: string
+        description: 'AWS region'
+      name:
+        required: true
+        type: string
+      lambda-function-name:
+        required: true
+        type: string
+      uploads:
+        required: false
+        type: string
+        default: ''
+      env:
+        required: false
+        type: string
+        default: 'dev'
+    secrets:
+      account-id:
+        required: true
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+
+jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      is_modified: ${{ steps.filter.outputs.code_changes == 'true' || steps.filter.outputs.env_changes == 'true' }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          # detect changes for current branch
+          base: ${{ github.ref }}
+          filters: |
+            code_changes:
+              - 'functions/${{ inputs.name }}/**'
+              - '.github/workflows/**'
+            env_changes:
+              - 'env/${{ inputs.env }}/${{ inputs.name }}.env'
+
+  build:
+    needs: check_changes
+    if: needs.check_changes.outputs.is_modified == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        working-directory: functions/${{ inputs.name }}
+        run: npm install
+
+      - name: Build
+        id: build
+        working-directory: functions/${{ inputs.name }}
+        run: npm run build
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ inputs.name }}
+          path: |
+            env/${{ inputs.env }}/${{ inputs.name}}.env
+            functions/${{ inputs.name }}/dist
+            ${{ inputs.uploads }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.name }}
+
+      - name: List all files
+        run:
+          ls -R
+
+      - name: Zip function
+        run: |
+          cd functions/${{ inputs.name }}
+          zip -r lambda.zip .
+          mv lambda.zip ../../lambda.zip
+
+      - name: Load env file
+        id: readenv
+        env:
+          env_file: env/${{ inputs.env }}/${{ inputs.name }}.env
+        run:
+          echo "::set-output name=env::$(cat ${{env.env_file}} | tr '\n' ',')"
+
+      - name: List files
+        run:
+          ls -R
+
+      - name: Deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.aws-access-key-id }}
+          aws_secret_access_key: ${{ secrets.aws-secret-access-key }}
+          aws_region: ${{ inputs.region }}
+          function_name: ${{ inputs.lambda-function-name }}
+          zip_file: lambda.zip
+          # convert JSON to string output of environment
+          environment: ${{ (steps.readenv.outputs.env ) }}

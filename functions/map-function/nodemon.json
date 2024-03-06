@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ignore": ["src/**/*.test.ts", "node_modules", "test/**"],
+    "ext": "ts,mjs,js,json,graphql",
+    "exec": "etsc && node -r tsconfig-paths/register -r ts-node/register ./dist/server.js",
+    "legacyWatch": true
+}
