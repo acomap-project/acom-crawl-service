@@ -6,7 +6,7 @@ on:
       region:
         required: true
         type: string
-        description: 'AWS region'
+        description: "AWS region"
       name:
         required: true
         type: string
@@ -16,11 +16,11 @@ on:
       uploads:
         required: false
         type: string
-        default: ''
+        default: ""
       env:
         required: false
         type: string
-        default: 'dev'
+        default: "dev"
     secrets:
       account-id:
         required: true
@@ -33,7 +33,7 @@ jobs:
   check_changes:
     runs-on: ubuntu-latest
     outputs:
-      is_modified: ${{ steps.filter.outputs.code_changes == 'true' || steps.filter.outputs.env_changes == 'true' }}
+      is_modified: ${{ steps.filter.outputs.code_changes == 'true' || steps.filter.outputs.env_changes == 'true' || steps.filter.outputs.version_changes == 'true'}}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -47,6 +47,8 @@ jobs:
               - '.github/workflows/**'
             env_changes:
               - 'env/${{ inputs.env }}/${{ inputs.name }}.env'
+            version_changes:
+              - version
 
   build:
     needs: check_changes
@@ -88,8 +90,7 @@ jobs:
           name: ${{ inputs.name }}
 
       - name: List all files
-        run:
-          ls -R
+        run: ls -R
 
       - name: Zip function
         run: |
@@ -101,12 +102,10 @@ jobs:
         id: readenv
         env:
           env_file: env/${{ inputs.env }}/${{ inputs.name }}.env
-        run:
-          echo "::set-output name=env::$(cat ${{env.env_file}} | tr '\n' ',')"
+        run: echo "::set-output name=env::$(cat ${{env.env_file}} | tr '\n' ',')"
 
       - name: List files
-        run:
-          ls -R
+        run: ls -R
 
       - name: Deploy
         uses: appleboy/lambda-action@master
