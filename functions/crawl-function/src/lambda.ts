@@ -4,7 +4,7 @@ import { CrawlerManager, MogiCrawler, PhongTro123Crawler } from './services'
 
 export type CrawlFunctionEvent = LocationArea
 export interface CrawFunctionResult {
-	items: Accommodation[]
+	item_list: Accommodation[]
 }
 
 let controller: CrawlController
@@ -33,6 +33,6 @@ export const handler = async (
 	})
 
 	return {
-		items: accomList,
+		item_list: accomList,
 	}
 }
