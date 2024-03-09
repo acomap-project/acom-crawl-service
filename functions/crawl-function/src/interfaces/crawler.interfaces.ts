@@ -1,4 +1,3 @@
-import { District } from '../constants'
 import { Accommodation, LocationArea } from '../models'
 
 export interface CrawlerConfiguration {

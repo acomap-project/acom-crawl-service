@@ -9,17 +9,11 @@ import { handler } from './lambda'
 
 const app = express()
 
+app.use(express.json())
+
 app.post('/crawl', async (req: Request, res: Response) => {
 	try {
-		const result = await handler(
-			{
-				city: 'Hồ Chí Minh',
-				district: 'Quận 1',
-				city_code: 'ho-chi-minh',
-				district_code: 'quan-1',
-			},
-			{},
-		)
+		const result = await handler(req.body as any, {})
 
 		res.status(200).json(result)
 	} catch (error) {

@@ -1,11 +1,12 @@
 import * as cheerio from 'cheerio'
 import axios from 'axios'
+import AREA_MAPPING from '../../config/phongtro123-area-mapping.json'
 import {
 	CrawlerConfiguration,
 	ICrawlService,
 } from '../interfaces/crawler.interfaces'
 import moment from 'moment'
-import { parseArea, parsePrice } from '../utils/crawler.utils'
+import { parseArea } from '../utils/crawler.utils'
 import { Accommodation, Coordination, LocationArea } from 'src/models'
 
 export class PhongTro123Crawler implements ICrawlService {
@@ -93,40 +94,24 @@ export class PhongTro123Crawler implements ICrawlService {
 		maxPrice &&
 			url.searchParams.append('gia_den', (maxPrice * 1000000).toString())
 
+		console.log(`Query for ${city} - ${district}: ` + url.toString())
+
 		return url.toString()
 	}
 
 	private getAreaUrlParam(area: LocationArea) {
 		const { city_code, district_code } = area
 
-		let district
-		switch (district_code) {
-			case 'quan-1':
-				district = 'quan-1'
-				break
-			case 'quan-2':
-				district = 'quan-2'
-				break
-			case 'quan-3':
-				district = 'quan-3'
-				break
-			case 'thu-duc':
-				district = 'quan-thu-duc'
-				break
-			case 'binh-thanh':
-				district = 'quan-binh-thanh'
-				break
-			case 'go-vap':
-				district = 'quan-go-vap'
-				break
-			case 'phu-nhuan':
-				district = 'quan-phu-nhuan'
-				break
+		const city = AREA_MAPPING.city_mapping_code[city_code]
+		const district = AREA_MAPPING.district_mapping_code[city][district_code]
+
+		if (!city || !district) {
+			throw new Error('Invalid area code')
 		}
 
 		return {
-			city: city_code,
-			district: district,
+			city,
+			district,
 		}
 	}
 
@@ -202,7 +187,7 @@ export class PhongTro123Crawler implements ICrawlService {
 			numberOfBedRooms: -1,
 			numberOfWCs: -1,
 			phoneNumber: phoneNumber.trim(),
-			price: parsePrice(price),
+			price: this.parsePrice(price),
 			propUrl,
 			publishedDate: moment(
 				publishedTime.substr(-10),
@@ -240,5 +225,12 @@ export class PhongTro123Crawler implements ICrawlService {
 			longitude,
 			latitude,
 		}
+	}
+
+	private parsePrice(priceStr: string) {
+		// format of price is like '3.5 triệu/tháng' or '3 triệu/tháng'
+		// WARNING: this function only works for price in million. Not applicable for price in billion like '1.5 tỷ/tháng'
+		const priceParts = priceStr.split(' triệu/tháng')
+		return parseFloat(priceParts[0])
 	}
 }

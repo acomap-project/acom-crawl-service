@@ -4,9 +4,33 @@ import {
 	CrawlerConfiguration,
 	ICrawlService,
 } from '../interfaces/crawler.interfaces'
+import AREA_MAPPING from '../../config/mogi-area-mapping.json'
 import { Accommodation, Coordination, LocationArea } from 'src/models'
-import { District } from 'src/constants'
-import { parsePrice } from 'src/utils/crawler.utils'
+
+const CITY_MAPPING_CODE = {
+	'ho-chi-minh': 'ho-chi-minh',
+}
+
+const DISTRICT_MAPPING_CODE = {
+	[CITY_MAPPING_CODE['ho-chi-minh']]: {
+		'quan-1': 'quan-1',
+		'quan-2': 'quan-2',
+		'quan-3': 'quan-3',
+		'quan-4': 'quan-4',
+		'quan-5': 'quan-5',
+		'quan-6': 'quan-6',
+		'quan-7': 'quan-7',
+		'quan-8': 'quan-8',
+		'quan-9': 'quan-9',
+		'quan-10': 'quan-10',
+		'quan-11': 'quan-11',
+		'quan-12': 'quan-12',
+		'quan-binh-thanh': 'quan-binh-thanh',
+		'quan-thu-duc': 'quan-thu-duc',
+		'quan-go-vap': 'quan-go-vap',
+		'quan-phu-nhuan': 'quan-phu-nhuan',
+	},
+}
 
 export class MogiCrawler implements ICrawlService {
 	name = 'mogi'
@@ -163,24 +187,11 @@ export class MogiCrawler implements ICrawlService {
 			numberOfWCs: parseInt(numberOfWCs.split(' ')[0]),
 			phoneNumber: phoneNumber.trimStart(),
 			propertyName,
-			price: parsePrice(price),
+			price: this.parsePrice(price),
 			publishedDate: publishedDate,
 			description,
 			location,
 			isLocationResolved: !!location,
-		}
-	}
-
-	private getDistrictValue(district: District) {
-		switch (district) {
-			case District.BinhThanh:
-				return 'quan-binh-thanh'
-			case District.PhuNhuan:
-				return 'quan-phu-nhuan'
-			case District.GoVap:
-				return 'quan-go-vap'
-			case District.ThuDuc:
-				return 'quan-thu-duc'
 		}
 	}
 
@@ -200,34 +211,22 @@ export class MogiCrawler implements ICrawlService {
 	private getAreaUrlParam(area: LocationArea) {
 		const { city_code, district_code } = area
 
-		let district
-		switch (district_code) {
-			case 'quan-1':
-				district = 'quan-1'
-				break
-			case 'quan-2':
-				district = 'quan-2'
-				break
-			case 'quan-3':
-				district = 'quan-3'
-				break
-			case 'thu-duc':
-				district = 'quan-thu-duc'
-				break
-			case 'binh-thanh':
-				district = 'quan-binh-thanh'
-				break
-			case 'go-vap':
-				district = 'quan-go-vap'
-				break
-			case 'phu-nhuan':
-				district = 'quan-phu-nhuan'
-				break
-		}
+		const city = AREA_MAPPING.city_mapping_code[city_code]
+		const district = AREA_MAPPING.district_mapping_code[city][district_code]
 
 		return {
-			city: city_code,
-			district: district,
+			city,
+			district,
 		}
+	}
+
+	private parsePrice(priceStr: string) {
+		// for input "5 triệu 500 nghìn". convert to 5.5
+		const isNumber = (v: string) => !Number.isNaN(parseInt(v))
+		const priceParts = priceStr.split(' ').filter(isNumber).map(parseFloat)
+		if (priceParts.length === 1) {
+			return priceParts[0]
+		}
+		return priceParts[0] + priceParts[1] / 1000
 	}
 }
