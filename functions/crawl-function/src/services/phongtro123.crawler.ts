@@ -143,6 +143,7 @@ export class PhongTro123Crawler implements ICrawlService {
 			// location
 			const $location = $('.section.post-map')
 			const mapUrl = $location.find('iframe').attr('src')
+
 			return this.formatPropertyDetail({
 				id,
 				propUrl,
