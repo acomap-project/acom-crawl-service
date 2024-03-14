@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rmdir -r dist & esbuild --bundle --minify --keep-names --sources-content=false --target=node18 --platform=node --packages=external --outfile=dist/lambda.js src/lambda.ts",
+    "build": "rmdir -r dist & esbuild --bundle --minify --keep-names --sources-content=false --target=node18 --platform=node --external:aws-sdk --outfile=dist/lambda.js src/lambda.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nodemon",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
