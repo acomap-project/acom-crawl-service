@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.533.0",
+    "@aws-sdk/client-sqs": "^3.533.0",
     "@types/axios": "^0.14.0",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.2",

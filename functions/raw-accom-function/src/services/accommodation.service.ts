@@ -1,5 +1,5 @@
 import { RawAccommodation } from 'src/models'
-import { SQS } from 'aws-sdk'
+import { SQS } from '@aws-sdk/client-sqs'
 
 export interface AccommodationServiceConfig {
 	queueUrl: string
@@ -19,7 +19,7 @@ export class AccommodationService {
 		}
 
 		try {
-			const result = await sqs.sendMessage(params).promise()
+			const result = await sqs.sendMessage(params)
 			if (!result.MessageId) {
 				console.error(result)
 				throw new Error('Failed to push accommodation data to SQS')
