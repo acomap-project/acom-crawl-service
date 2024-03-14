@@ -1,5 +1,3 @@
-import { District } from '../constants'
-
 export interface Coordination {
 	longitude: number
 	latitude: number
@@ -12,8 +10,10 @@ export interface LocationArea {
 	district_code: string
 }
 
-export interface Accommodation {
+export interface RawAccommodation {
+	_id?: string
 	id: string
+	source: string
 	propUrl: string
 	propertyName: string
 	price: number
@@ -24,7 +24,8 @@ export interface Accommodation {
 	phoneNumber: string
 	address: string
 	description: string
-	source: string
+	location?: Coordination
+	isLocationResolved?: boolean
 	createdAt?: number
 	updatedAt?: number
 }

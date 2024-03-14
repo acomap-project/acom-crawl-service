@@ -1,5 +1,5 @@
-import { Accommodation } from '../../models'
+import { RawAccommodation } from '../../models'
 
 export class SaveAccomDTO {
-	accom: Accommodation
+	accom: RawAccommodation
 }
