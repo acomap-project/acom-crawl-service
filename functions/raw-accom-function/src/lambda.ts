@@ -58,6 +58,7 @@ export const handler = async (
 	context: any,
 ): Promise<FunctionResult> => {
 	init()
+	console.log(event)
 
 	switch (event.type) {
 		case 'step-function':
@@ -65,6 +66,8 @@ export const handler = async (
 		case 'api-gateway':
 			return handleAPIGatewayEvent(event)
 	}
+
+	throw new Error('Invalid event type')
 }
 
 async function handleStepFunctionEvent(
@@ -84,8 +87,10 @@ async function handleAPIGatewayEvent(
 	event: APIGatewayEvent,
 ): Promise<APIGatewayResult> {
 	if (event.method === 'resolve-accom') {
+		console.log('Handle resolve-accom')
 		try {
 			await controller.resolveAccom(event.body)
+			console.log('Resolve accom success')
 			return {
 				result: 'SUCCESS',
 				data: null,

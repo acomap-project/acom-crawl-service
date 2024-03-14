@@ -24,6 +24,7 @@ export class AccomController {
 		const accom = await this.repo.findById(_id)
 
 		if (!accom) {
+			console.log(`Accommodation with id ${_id} not found`)
 			throw new AccomNotFoundException(_id)
 		}
 
@@ -32,7 +33,9 @@ export class AccomController {
 
 		try {
 			await this.accomService.saveAccom(accom)
+			console.log(`Accommodation with id ${_id} resolved`)
 			await this.repo.delete(_id)
+			console.log(`Accommodation with id ${_id} deleted`)
 		} catch (error) {
 			console.error(error)
 			throw new SaveAccomFailedException(error)
