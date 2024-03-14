@@ -38,6 +38,7 @@ let controller: AccomController
 let isInit = false
 
 const init = () => {
+	console.log('Start init function')
 	if (isInit) {
 		return
 	}
@@ -51,6 +52,8 @@ const init = () => {
 	controller = new AccomController(repo, accomService)
 
 	isInit = true
+
+	console.log('End init function')
 }
 
 export const handler = async (
