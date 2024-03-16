@@ -20,9 +20,21 @@ const init = () => {
 		return
 	}
 	const crawlerManager = new CrawlerManager()
-	crawlerManager.addCrawler(new MogiCrawler())
-	crawlerManager.addCrawler(new PhongTro123Crawler())
-	crawlerManager.addCrawler(new ChototCrawler())
+
+	const crawlerList = new Set(process.env.CRAWLER_LIST.split(','))
+	crawlerList.forEach((crawler) => {
+		switch (crawler) {
+			case 'mogi':
+				crawlerManager.addCrawler(new MogiCrawler())
+				break
+			case 'phongtro123':
+				crawlerManager.addCrawler(new PhongTro123Crawler())
+				break
+			case 'chotot':
+				crawlerManager.addCrawler(new ChototCrawler())
+				break
+		}
+	})
 
 	controller = new CrawlController(crawlerManager)
 	isInit = true
