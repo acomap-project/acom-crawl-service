@@ -56,35 +56,46 @@ export class ChototCrawler implements ICrawlService {
 			return []
 		}
 		const rawAccomList = response.data.ads
-		return rawAccomList.map((rawAccom) => {
+		const accomList = await Promise.all(
+			rawAccomList.map((rawAccom) =>
+				this.getDetailOfProperty(rawAccom.list_id),
+			),
+		)
+		return accomList.filter((p) => p !== null)
+	}
+
+	private async getDetailOfProperty(
+		listingId: string,
+	): Promise<Accommodation> {
+		const url = `${this.SEARCH_BASE_URL}/${listingId}`
+		try {
+			const res = await axios.get(url)
+			const { ad, parameters } = res.data
+			const address =
+				parameters.find((p) => p.id === 'address')?.value || ''
 			return {
-				id: rawAccom.list_id,
+				id: ad.list_id,
 				source: this.name,
-				propertyName: rawAccom.subject,
-				address: [
-					rawAccom.address,
-					rawAccom.ward_name,
-					rawAccom.area_name,
-					rawAccom.region_name,
-				]
-					.filter(Boolean)
-					.join(', ')
-					.trim(),
-				description: rawAccom.body,
-				area: rawAccom.size,
+				propertyName: ad.subject,
+				address,
+				description: ad.body,
+				area: ad.size,
 				location: {
-					latitude: rawAccom.latitude,
-					longitude: rawAccom.longitude,
+					latitude: ad.latitude,
+					longitude: ad.longitude,
 				},
 				isLocationResolved: true,
 				numberOfBedRooms: -1,
 				numberOfWCs: -1,
 				phoneNumber: '',
-				price: rawAccom.price,
-				propUrl: `${this.BASE_PROP_URL}/${rawAccom.list_id}.htm`,
-				publishedDate: moment(rawAccom.list_time).format('DD/MM/YYYY'),
-			} as Accommodation
-		})
+				price: ad.price / 1000000,
+				propUrl: `${this.BASE_PROP_URL}/${ad.list_id}.htm`,
+				publishedDate: moment(ad.list_time).format('DD/MM/YYYY'),
+			}
+		} catch (error) {
+			console.error(`Failed to fetch property detail: ${error.message}`)
+			return null
+		}
 	}
 
 	protected getQueryUrl(config: CrawlerConfiguration) {
