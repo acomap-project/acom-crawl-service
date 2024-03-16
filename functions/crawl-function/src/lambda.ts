@@ -16,7 +16,7 @@ const init = () => {
 	}
 	const crawlerManager = new CrawlerManager()
 	crawlerManager.addCrawler(new MogiCrawler())
-	// crawlerManager.addCrawler(new PhongTro123Crawler())
+	crawlerManager.addCrawler(new PhongTro123Crawler())
 
 	controller = new CrawlController(crawlerManager)
 	isInit = true
