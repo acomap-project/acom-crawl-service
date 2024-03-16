@@ -229,6 +229,9 @@ export class PhongTro123Crawler implements ICrawlService {
 	}
 
 	private parsePrice(priceStr: string) {
+		if (priceStr === 'Thỏa thuận') {
+			return 0
+		}
 		// format of price is like '3.5 triệu/tháng' or '3 triệu/tháng'
 		// WARNING: this function only works for price in million. Not applicable for price in billion like '1.5 tỷ/tháng'
 		const priceParts = priceStr.split(' triệu/tháng')
