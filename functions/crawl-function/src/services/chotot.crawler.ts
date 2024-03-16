@@ -74,7 +74,7 @@ export class ChototCrawler implements ICrawlService {
 			const address =
 				parameters.find((p) => p.id === 'address')?.value || ''
 			return {
-				id: ad.list_id,
+				id: ad.list_id.toString(),
 				source: this.name,
 				propertyName: ad.subject,
 				address,
