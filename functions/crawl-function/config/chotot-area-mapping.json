@@ -1,0 +1,32 @@
+{
+    "city_mapping_code": {
+        "ho-chi-minh": "13000"
+    },
+    "district_mapping_code": {
+        "ho-chi-minh": {
+            "quan-1": "13096",
+            "quan-2": "13119",
+            "quan-3": "13098",
+            "quan-4": "13099",
+            "quan-5": "13100",
+            "quan-6": "13101",
+            "quan-7": "13102",
+            "quan-8": "13103",
+            "quan-9": "13119",
+            "quan-10": "13105",
+            "quan-11": "13106",
+            "quan-12": "13107",
+            "quan-binh-tan": "13108",
+            "quan-binh-thanh": "13109",
+            "quan-go-vap": "13110",
+            "quan-phu-nhuan": "13111",
+            "quan-tan-binh": "13112",
+            "quan-tan-phu": "13113",
+            "quan-thu-duc": "13119",
+            "huyen-binh-chanh": "13115",
+            "huyen-cu-chi": "13116",
+            "huyen-hoc-mon": "13117",
+            "huyen-nha-be": "13118"
+        }
+    }
+}

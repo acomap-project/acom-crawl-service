@@ -1,6 +1,11 @@
 import { CrawlController } from './controllers'
 import { Accommodation, LocationArea } from './models'
-import { CrawlerManager, MogiCrawler, PhongTro123Crawler } from './services'
+import {
+	ChototCrawler,
+	CrawlerManager,
+	MogiCrawler,
+	PhongTro123Crawler,
+} from './services'
 
 export type CrawlFunctionEvent = LocationArea
 export interface CrawFunctionResult {
@@ -17,6 +22,7 @@ const init = () => {
 	const crawlerManager = new CrawlerManager()
 	crawlerManager.addCrawler(new MogiCrawler())
 	crawlerManager.addCrawler(new PhongTro123Crawler())
+	crawlerManager.addCrawler(new ChototCrawler())
 
 	controller = new CrawlController(crawlerManager)
 	isInit = true
