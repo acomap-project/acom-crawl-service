@@ -19,13 +19,8 @@ export interface RawAccommodation {
 	propUrl: string
 	propertyName: string
 	price: number
-	area: number
-	numberOfBedRooms: number
-	numberOfWCs: number
 	publishedDate: string
-	phoneNumber: string
 	address: string
-	description: string
 	location?: Coordination
 	createdAt?: number
 	updatedAt?: number
