@@ -209,10 +209,10 @@ export class MogiCrawler implements ICrawlService {
 	}
 
 	private getAreaUrlParam(area: LocationArea) {
-		const { city_code, district_code } = area
+		const { city_code, area_code } = area
 
 		const city = AREA_MAPPING.city_mapping_code[city_code]
-		const district = AREA_MAPPING.district_mapping_code[city][district_code]
+		const district = AREA_MAPPING.district_mapping_code[city][area_code]
 
 		return {
 			city,

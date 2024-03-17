@@ -29,7 +29,6 @@ export class AccomController {
 		}
 
 		accom.location = location
-		accom.isLocationResolved = true
 
 		try {
 			await this.accomService.saveAccom(accom)

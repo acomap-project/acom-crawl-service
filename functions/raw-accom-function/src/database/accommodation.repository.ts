@@ -67,6 +67,8 @@ export class AccommodationRepository {
 					_id: item._id.S,
 					id: item.id.S,
 					propUrl: item.propUrl.S,
+					cityCode: item.cityCode.S,
+					areaCode: item.areaCode.S,
 					propertyName: item.propertyName.S,
 					price: parseInt(item.price.N),
 					area: parseInt(item.area.N),

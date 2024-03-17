@@ -117,11 +117,11 @@ export class ChototCrawler implements ICrawlService {
 	}
 
 	private getAreaUrlParam(area: LocationArea) {
-		const { city_code, district_code } = area
+		const { city_code, area_code } = area
 
 		const city = AREA_MAPPING.city_mapping_code[city_code]
 		const district =
-			AREA_MAPPING.district_mapping_code[city_code][district_code]
+			AREA_MAPPING.district_mapping_code[city_code][area_code]
 
 		if (!city || !district) {
 			throw new Error('Invalid area code')

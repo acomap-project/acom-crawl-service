@@ -51,6 +51,10 @@ export const handler = async (
 	})
 
 	return {
-		item_list: accomList,
+		item_list: accomList.map((accom) => ({
+			...accom,
+			cityCode: event.city_code,
+			areaCode: event.area_code,
+		})),
 	}
 }

@@ -14,6 +14,8 @@ export interface RawAccommodation {
 	_id?: string
 	id: string
 	source: string
+	cityCode: string
+	areaCode: string
 	propUrl: string
 	propertyName: string
 	price: number
@@ -25,7 +27,6 @@ export interface RawAccommodation {
 	address: string
 	description: string
 	location?: Coordination
-	isLocationResolved?: boolean
 	createdAt?: number
 	updatedAt?: number
 }

@@ -7,9 +7,9 @@ export interface Coordination {
 
 export interface LocationArea {
 	city: string
-	district: string
+	area: string
 	city_code: string
-	district_code: string
+	area_code: string
 }
 
 export interface Accommodation {
