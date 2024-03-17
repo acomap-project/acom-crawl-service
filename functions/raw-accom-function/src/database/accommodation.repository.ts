@@ -13,12 +13,16 @@ const client = new DynamoDBClient()
 
 export interface Config {
 	tableName: string
+	expiryDurationInDays: number
 }
 
 export class AccommodationRepository {
 	constructor(private readonly config: Config) {}
 
 	async save(accom: RawAccommodation) {
+		const expiredAt =
+			Math.round(Date.now() / 1000) +
+			this.config.expiryDurationInDays * 24 * 60 * 60
 		const params: PutItemCommandInput = {
 			TableName: this.config.tableName,
 			Item: {
@@ -37,6 +41,9 @@ export class AccommodationRepository {
 				source: { S: accom.source },
 				createdAt: { N: Date.now().toString() },
 				updatedAt: { N: Date.now().toString() },
+				expiredAt: {
+					N: expiredAt.toString(),
+				},
 			},
 		}
 

@@ -45,6 +45,7 @@ const init = () => {
 
 	const repo = new AccommodationRepository({
 		tableName: process.env.RAW_ACCOMMODATION_TABLE_NAME,
+		expiryDurationInDays: 10,
 	})
 	const accomService = new AccommodationService({
 		queueUrl: process.env.ACCOMMODATION_SERVICE_SQS_QUEUE_URL,
