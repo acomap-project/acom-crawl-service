@@ -129,9 +129,6 @@ export class PhongTro123Crawler implements ICrawlService {
 				.text()
 			// overview
 			const $overview = $('.section.post-overview')
-			const description = $('.section > .section-content')
-				.text()
-				.replace(/<(\/)?p>/, '.')
 			const publishedTime = $overview
 				.find('table tr:nth-child(6) td:nth-child(2)')
 				.text()
@@ -154,7 +151,6 @@ export class PhongTro123Crawler implements ICrawlService {
 				publishedTime,
 				phoneNumber,
 				mapUrl,
-				description,
 			})
 		} catch (error) {
 			throw error
@@ -172,7 +168,6 @@ export class PhongTro123Crawler implements ICrawlService {
 			publishedTime,
 			phoneNumber,
 			mapUrl,
-			description,
 		} = propDetail
 
 		const location = this.getAddressFromMapUrl(mapUrl)
@@ -194,7 +189,6 @@ export class PhongTro123Crawler implements ICrawlService {
 				publishedTime.substr(-10),
 				'DD/MM/YYYY',
 			).format('DD/MM/YYYY'),
-			description,
 		}
 	}
 

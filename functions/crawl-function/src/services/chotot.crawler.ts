@@ -78,7 +78,6 @@ export class ChototCrawler implements ICrawlService {
 				source: this.name,
 				propertyName: ad.subject,
 				address,
-				description: ad.body,
 				area: ad.size,
 				location: {
 					latitude: ad.latitude,

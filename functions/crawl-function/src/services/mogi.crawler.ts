@@ -166,7 +166,6 @@ export class MogiCrawler implements ICrawlService {
 			mapUrl,
 			phoneNumber,
 			address,
-			description,
 		} = plainData
 
 		let id
@@ -189,7 +188,6 @@ export class MogiCrawler implements ICrawlService {
 			propertyName,
 			price: this.parsePrice(price),
 			publishedDate: publishedDate,
-			description,
 			location,
 			isLocationResolved: !!location,
 		}

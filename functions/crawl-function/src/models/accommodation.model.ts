@@ -25,6 +25,5 @@ export interface Accommodation {
 	isLocationResolved: boolean
 	phoneNumber: string
 	address: string
-	description: string
 	source: string
 }

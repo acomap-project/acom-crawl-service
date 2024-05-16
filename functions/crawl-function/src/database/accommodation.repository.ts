@@ -71,7 +71,6 @@ export class AccommodationRepository {
 						},
 						phoneNumber: item.phoneNumber.S,
 						address: item.address.S,
-						description: item.description.S,
 					}
 				})
 
